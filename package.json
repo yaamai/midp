@@ -34,6 +34,7 @@
     "fastify-cookie": "^4.1.0",
     "fastify-csrf": "^1.0.4",
     "fastify-formbody": "^5.0.0",
+    "fastify-graceful-shutdown": "^3.0.0",
     "fastify-static": "^3.2.0",
     "sirv-cli": "^1.0.0"
   }

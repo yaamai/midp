@@ -9,16 +9,25 @@ const fastifyCookie = require('fastify-cookie')
 const fastifyFormBody = require('fastify-formbody')
 const fastifyCSRF = require('fastify-csrf')
 const hydra = require('@oryd/hydra-client')
-const hydraAdmin = new hydra.AdminApi('http://localhost:4445')
 const bcrypt = require('bcryptjs')
 const fs = require("fs")
 
+const PASSWORD_FILE = process.env.MIDP_PASSWORD_FILE || 'deploy/htpasswd'
+const BASE_DIR = process.env.MIDP_BASE_DIR || '/../public/build'
+const REMEMBER_FOR = process.env.MIDP_REMEMBER_FOR || 3600
+const PORT = process.env.PORT || 3000
+const LISTEN_ADDR = process.env.LISTEN_ADDR || '127.0.0.1'
+const HYDRA_ADMIN_URL = process.env.MIDP_HYDRA_URL || 'http://localhost:4445'
+
+const hydraAdmin = new hydra.AdminApi(HYDRA_ADMIN_URL)
+
+fastify.register(require('fastify-graceful-shutdown'))
 fastify.register(fastifyCookie);
 fastify.register(fastifyFormBody);
 fastify.register(fastifyCSRF, { cookie: true  });
 fastify.register(require('fastify-static'), {
-    root: path.join(__dirname, '/../public'),
-    prefix: '/public/',
+    root: path.join(__dirname, BASE_DIR),
+    prefix: '/public',
     setHeaders: (res, path, stat) => {
         console.log(path)
         if (path.endsWith(".js")) {
@@ -39,21 +48,17 @@ const template = `
 
 	<title>midp</title>
 
-	<link rel='stylesheet' href='/public/build/bundle.css'>
+	<link rel='stylesheet' href='public/bundle.css'>
 	<script>
     SERVER_DATA
     </script>
-	<script defer src='/public/build/bundle.js'></script>
+	<script defer src='public/bundle.js'></script>
 </head>
 
 <body>
 </body>
 </html>
 `
-
-const PASSWORD_FILE = process.env.MIDP_PASSWORD_FILE
-const REMEMBER_FOR = process.env.MIDP_REMEMBER_FOR || 3600
-const PORT = process.env.PORT || 3000
 
 function readPasswordFile() {
     // username -> hash map
@@ -194,7 +199,7 @@ fastify.post('/login', async function (request, reply) {
 })
 
 // Run the server!
-fastify.listen(PORT, (err, address) => {
+fastify.listen(PORT, LISTEN_ADDR, (err, address) => {
   if (err) throw err
   fastify.log.info(`server listening on ${address}`)
 })

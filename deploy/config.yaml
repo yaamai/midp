@@ -97,7 +97,7 @@ serve:
     # - Windows Command Line (CMD):
     #    > set SERVE_PUBLIC_HOST=<value>
     #
-    host: localhost
+    host: 0.0.0.0
 
     ## cors ##
     #
@@ -345,7 +345,7 @@ serve:
     # - Windows Command Line (CMD):
     #    > set SERVE_ADMIN_HOST=<value>
     #
-    host: localhost
+    host: 0.0.0.0
 
     ## cors ##
     #
