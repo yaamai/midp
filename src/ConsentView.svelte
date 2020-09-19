@@ -37,40 +37,31 @@ main.center {
 }
 </style>
 
-<main class="center">
-  <Card style="width: 360px" variant="outlined" padded>
-    <h2>Review scopes</h2>
+<template lang="pug">
+main(class="center")
+    Card(variant="outlined" padded)
+        h2 Review scopes
 
-    <form action="/consent" method="post">
-      <input type="hidden" value="{csrf}" name="_csrf"/>
-      <input type="hidden" value="{challenge}" name="challenge"/>
+        form(action="/consent" method="post")
+            input(type="hidden" value="{csrf}" name="_csrf")
+            input(type="hidden" value="{challenge}" name="challenge")
 
-      <List class="scope-list" twoLine checklist>
-        {#each list as item}
-          <Item>
-            <Text>
-              <PrimaryText><ListLabel>{item.label}</ListLabel></PrimaryText>
-              <SecondaryText>{item.description}</SecondaryText>
-            </Text>
-            <Meta>
-              <Checkbox input$name="scopes" bind:group={selected} value={item.value} />
-            </Meta>
-          </Item>
-        {/each}
-      </List>
+            List(class="scope-list" twoLine checklist)
+                +each("list as item")
+                    Item
+                        Text
+                            PrimaryText
+                                ListLabel {item.label}
+                            SecondaryText {item.description}
+                        Meta
+                            Checkbox(input$name="scopes" bind:group="{selected}" value="{item.value}")
 
-      <FormField>
-        <Checkbox input$name="remember" input$value="true" bind:checked={remember} />
-        <span slot="label">Remember me</span>
-      </FormField>
-      <Actions>
-        <Button name="action" value="accept" type="submit" variant="raised">
-          <ButtonLabel>Accept</ButtonLabel>
-        </Button>
-        <Button name="action" value="reject" type="submit">
-          <ButtonLabel>Reject</ButtonLabel>
-        </Button>
-      </Actions>
-    </form>
-  </Card>
-</main>
+            FormField
+                Checkbox(input$name="remember" input$value="true" bind:checked="{remember}")
+                span(slot="label") Remember me
+            Actions
+                Button(name="action" value="accept" type="submit" variant="raised")
+                    ButtonLabel Accept
+                Button(name="action" value="reject" type="submit")
+                    ButtonLabel Reject
+</template>

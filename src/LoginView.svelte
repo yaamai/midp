@@ -34,30 +34,46 @@ form {
 }
 </style>
 
-<main class="center">
-  <Card variant="outlined" padded>
-    <h2>Login to AAA</h2>
+<template lang="pug">
+main(class="center")
+    Card(variant="outlined" padded)
+        h2 Login to AAA
 
-    <form action="/login" method="post">
-      <input type="hidden" value="{csrf}" name="_csrf"/>
-      <input type="hidden" value="{challenge}" name="challenge"/>
+        form(action="/login" method="post")
+            input(type="hidden" value="{csrf}" name="_csrf")
+            input(type="hidden" value="{challenge}" name="challenge")
 
-      <Textfield input$name="username" class="input-forms" input$autocomplete="current-username" type="text" variant="outlined" bind:value={username} label="Username" input$aria-controls="helper-text-outlined-a" input$aria-describedby="helper-text-outlined-a" />
-      <Textfield input$name="password" class="input-forms" input$autocomplete="password" type="password" variant="outlined" bind:value={password} label="Password" input$aria-controls="helper-text-outlined-a" input$aria-describedby="helper-text-outlined-a" />
+            Textfield(
+                bind:value="{username}"
+                label="Username"
+                type="text"
+                variant="outlined"
+                class="input-forms"
+                input$name="username"
+                input$autocomplete="current-username"
+                input$aria-controls="helper-text-outlined-a"
+                input$aria-describedby="helper-text-outlined-a"
+            )
 
-      <FormField>
-        <Checkbox input$name="remember" input$value="true" bind:checked={remember} />
-        <span slot="label">Remember me</span>
-      </FormField>
-      <Actions>
-        <Button name="action" value="login" type="submit" variant="raised">
-          <Label>Login</Label>
-        </Button>
-        <Button name="action" value="cancel" type="submit">
-          <Label>Cancel</Label>
-        </Button>
-      </Actions>
-    </form>
-  </Card>
-</main>
+            Textfield(
+                bind:value="{password}"
+                label="Password"
+                type="password"
+                variant="outlined"
+                class="input-forms"
+                input$name="password"
+                input$autocomplete="password"
+                input$aria-controls="helper-text-outlined-a"
+                input$aria-describedby="helper-text-outlined-a"
+            )
 
+            FormField
+                Checkbox(input$name="remember" input$value="true" bind:checked="{remember}")
+                span(slot="label") Remember me
+
+            Actions
+                Button(name="action" value="login" type="submit" variant="raised")
+                    Label Login
+                Button(name="action" value="cancel" type="submit")
+                    Label Cancel
+</template>
