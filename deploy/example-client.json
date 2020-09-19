@@ -1,0 +1,9 @@
+{
+  "client_id": "example",
+  "client_name": "example",
+  "client_secret": "exampleexample",
+  "grant_types": ["authorization_code", "refresh_token"],
+  "response_types": ["code"],
+  "scope": "openid,offline",
+  "redirect_uris": ["http://localhost:3000/callback"]
+}

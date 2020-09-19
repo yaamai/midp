@@ -7,6 +7,7 @@
     export let name;
     export let selected;
     export let csrf;
+    export let challenge;
 </script>
 
 <style>
@@ -34,6 +35,7 @@ form {
 
     <form action="/login" method="post">
     <input type="hidden" value="{csrf}" name="_csrf"/>
+    <input type="hidden" value="{challenge}" name="challenge"/>
 
     <Textfield input$name="username" type="text" style="margin-bottom: 1em;" variant="outlined" bind:value={name} label="Username" input$aria-controls="helper-text-outlined-a" input$aria-describedby="helper-text-outlined-a" />
     <Textfield input$name="password" type="password" style="margin-bottom: 1em;" variant="outlined" bind:value={name} label="Password" input$aria-controls="helper-text-outlined-a" input$aria-describedby="helper-text-outlined-a" />

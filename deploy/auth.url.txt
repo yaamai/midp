@@ -1,0 +1,1 @@
+http://localhost:4444/oauth2/auth/?client_id=example&scope=openid,offline&response_type=code&redirect_uri=http://localhost:3000/callback&state=aaaaaaaa

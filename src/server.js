@@ -7,6 +7,9 @@ const AutoLoad = require('fastify-autoload')
 const fastifyCookie = require('fastify-cookie');
 const fastifyFormBody = require('fastify-formbody');
 const fastifyCSRF = require('fastify-csrf');
+const hydra = require('@oryd/hydra-client');
+const hydraAdmin = new hydra.AdminApi('http://localhost:4445')
+
 
 fastify.register(fastifyCookie);
 fastify.register(fastifyFormBody);
@@ -48,7 +51,12 @@ const template = `
 `
 
 fastify.get('/login', async function (request, reply) {
-  let data = {"name": "server-data", "csrf": request.csrfToken()}
+  let challenge = request.query.login_challenge
+  console.log(request.query)
+  let loginRequest = await hydraAdmin.getLoginRequest(challenge)
+  console.log("Login: ", loginRequest)
+
+  let data = {"name": "server-data", "csrf": request.csrfToken(), "challenge": challenge}
   const result = template
     .replace('SERVER_DATA', 'const SERVER_DATA = ' + JSON.stringify(data));
   reply.type('text/html');
@@ -56,11 +64,19 @@ fastify.get('/login', async function (request, reply) {
 })
 
 fastify.post('/login', async function (request, reply) {
-  let data = {"name": "server-data", "csrf": request.csrfToken()}
-  const result = template
-    .replace('SERVER_DATA', 'const SERVER_DATA = ' + JSON.stringify(data));
-  reply.type('text/html');
-  return reply.send(result);
+
+    // check login credential
+    // req.body.username, req.body.password
+    let acceptResult = await hydraAdmin.acceptLoginRequest(request.body.challenge, {subject: "hogehoge", remember: true, rememberFor: 3600})
+    console.log(acceptResult)
+    return reply.redirect(301, acceptResult.body.redirectTo)
+
+//  let data = {"name": "server-data", "csrf": request.csrfToken()}
+//  console.log(request.body)
+//  const result = template
+//    .replace('SERVER_DATA', 'const SERVER_DATA = ' + JSON.stringify(data));
+//  reply.type('text/html');
+//  return reply.send(result);
 })
 
 // Run the server!

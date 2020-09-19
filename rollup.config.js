@@ -61,6 +61,7 @@ export default {
             use: [
               ['sass', {
                 includePaths: [
+                  './src',
                   './theme',
                   './node_modules'
                 ]
