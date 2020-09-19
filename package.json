@@ -25,6 +25,7 @@
   },
   "dependencies": {
     "@oryd/hydra-client": "^1.7.4",
+    "bcryptjs": "^2.4.3",
     "fastify": "^3.4.1",
     "fastify-autoload": "^3.1.0",
     "fastify-cli": "^2.2.0",

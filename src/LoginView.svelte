@@ -43,10 +43,10 @@ form {
       <span slot="label">Remember me</span>
     </FormField>
     <Actions>
-      <Button type="submit">
+      <Button name="action" value="login" type="submit">
         <Label>Login</Label>
       </Button>
-      <Button type="submit">
+      <Button name="action" value="cancel" type="submit">
         <Label>Cancel</Label>
       </Button>
     </Actions>
