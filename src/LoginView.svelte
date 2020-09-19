@@ -7,7 +7,7 @@
 
     export let username;
     export let password;
-    export let remeberMe;
+    export let remember;
     export let csrf;
     export let challenge;
 </script>
@@ -32,24 +32,24 @@ form {
     <h2>Login to AAA</h2>
 
     <form action="/login" method="post">
-    <input type="hidden" value="{csrf}" name="_csrf"/>
-    <input type="hidden" value="{challenge}" name="challenge"/>
+      <input type="hidden" value="{csrf}" name="_csrf"/>
+      <input type="hidden" value="{challenge}" name="challenge"/>
 
-    <Textfield input$name="username" type="text" style="margin-bottom: 1em;" variant="outlined" bind:value={username} label="Username" input$aria-controls="helper-text-outlined-a" input$aria-describedby="helper-text-outlined-a" />
-    <Textfield input$name="password" type="password" style="margin-bottom: 1em;" variant="outlined" bind:value={password} label="Password" input$aria-controls="helper-text-outlined-a" input$aria-describedby="helper-text-outlined-a" />
+      <Textfield input$name="username" type="text" style="margin-bottom: 1em;" variant="outlined" bind:value={username} label="Username" input$aria-controls="helper-text-outlined-a" input$aria-describedby="helper-text-outlined-a" />
+      <Textfield input$name="password" type="password" style="margin-bottom: 1em;" variant="outlined" bind:value={password} label="Password" input$aria-controls="helper-text-outlined-a" input$aria-describedby="helper-text-outlined-a" />
 
-    <FormField style="margin-top: -1em;">
-      <Checkbox input$name="remember" input$value="true" bind:checked={remeberMe} />
-      <span slot="label">Remember me</span>
-    </FormField>
-    <Actions>
-      <Button name="action" value="login" type="submit">
-        <Label>Login</Label>
-      </Button>
-      <Button name="action" value="cancel" type="submit">
-        <Label>Cancel</Label>
-      </Button>
-    </Actions>
+      <FormField style="margin-top: -1em;">
+        <Checkbox input$name="remember" input$value="true" bind:checked={remember} />
+        <span slot="label">Remember me</span>
+      </FormField>
+      <Actions>
+        <Button name="action" value="login" type="submit">
+          <Label>Login</Label>
+        </Button>
+        <Button name="action" value="cancel" type="submit">
+          <Label>Cancel</Label>
+        </Button>
+      </Actions>
     </form>
   </Card>
 </main>
