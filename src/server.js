@@ -50,14 +50,32 @@ const template = `
 </html>
 `
 
+const SCOPE_DESCRIPTION = {};
 fastify.get('/consent', async function (request, reply) {
   let challenge = request.query.consent_challenge
+  console.log(challenge)
 
-  let data = {"view": "consent", "viewProps": {}}
+  let consentRequest = await hydraAdmin.getConsentRequest(challenge)
+  let data = {
+    view: "consent",
+    viewProps: {
+      csrf: request.csrfToken(),
+      challenge: challenge,
+      list: consentRequest.body.requestedScope.map((e) => {return {label: e, value: e, description: SCOPE_DESCRIPTION[e] || ""}})
+    }
+  }
+
   const result = template
     .replace('SERVER_DATA', 'const SERVER_DATA = ' + JSON.stringify(data));
   reply.type('text/html');
   return reply.send(result);
+})
+
+fastify.post('/consent', async function (request, reply) {
+    console.log(request)
+    let acceptResult = await hydraAdmin.acceptConsentRequest(request.body.challenge, {subject: "hogehoge", remember: true, rememberFor: 3600})
+    console.log(acceptResult)
+    return reply.redirect(301, acceptResult.body.redirectTo)
 })
 
 fastify.get('/login', async function (request, reply) {

@@ -2,8 +2,9 @@
     import LoginView from './LoginView.svelte';
     import ConsentView from './ConsentView.svelte';
 
-    export let view = 'consent';
-    export let viewProps = {};
+    export let view;
+    export let viewProps;
+    console.log(view, viewProps);
 </script>
 
 {#if view == 'login'}

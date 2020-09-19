@@ -10,6 +10,8 @@
         {label: "hoge3", description: "long long long description", value: "fuga3"}
     ];
     export let selected = [];
+    export let csrf;
+    export let challenge;
 </script>
 
 <style>
@@ -26,6 +28,9 @@ main.center {
     <h2>Review scopes</h2>
 
     <form action="/consent" method="post">
+    <input type="hidden" value="{csrf}" name="_csrf"/>
+    <input type="hidden" value="{challenge}" name="challenge"/>
+
     <List class="demo-list" twoLine checklist>
       {#each list as item}
         <Item>
