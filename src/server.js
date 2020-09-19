@@ -50,13 +50,23 @@ const template = `
 </html>
 `
 
+fastify.get('/consent', async function (request, reply) {
+  let challenge = request.query.consent_challenge
+
+  let data = {"view": "consent", "viewProps": {}}
+  const result = template
+    .replace('SERVER_DATA', 'const SERVER_DATA = ' + JSON.stringify(data));
+  reply.type('text/html');
+  return reply.send(result);
+})
+
 fastify.get('/login', async function (request, reply) {
   let challenge = request.query.login_challenge
   console.log(request.query)
   let loginRequest = await hydraAdmin.getLoginRequest(challenge)
   console.log("Login: ", loginRequest)
 
-  let data = {"name": "server-data", "csrf": request.csrfToken(), "challenge": challenge}
+  let data = {"view": "login", "viewProps": {"username": "", "password": "", "csrf": request.csrfToken(), "challenge": challenge}}
   const result = template
     .replace('SERVER_DATA', 'const SERVER_DATA = ' + JSON.stringify(data));
   reply.type('text/html');

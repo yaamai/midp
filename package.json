@@ -13,6 +13,7 @@
     "@smui/card": "^1.0.0",
     "@smui/checkbox": "^1.0.0",
     "@smui/form-field": "^1.0.0",
+    "@smui/list": "^1.0.0",
     "@smui/textfield": "^1.0.0",
     "rollup": "^2.3.4",
     "rollup-plugin-livereload": "^2.0.0",
