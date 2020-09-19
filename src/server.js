@@ -39,7 +39,6 @@ const template = `
 
 	<title>midp</title>
 
-	<link rel='icon' type='image/png' href='/favicon.png'>
 	<link rel='stylesheet' href='/public/build/bundle.css'>
 	<script>
     SERVER_DATA
@@ -52,10 +51,14 @@ const template = `
 </html>
 `
 
+const PASSWORD_FILE = process.env.MIDP_PASSWORD_FILE
+const REMEMBER_FOR = process.env.MIDP_REMEMBER_FOR || 3600
+const PORT = process.env.PORT || 3000
+
 function readPasswordFile() {
     // username -> hash map
     let m = {}
-    fs.readFileSync("htpasswd", "UTF-8").split("\n").forEach( (l) => {
+    fs.readFileSync(PASSWORD_FILE, "UTF-8").split("\n").forEach( (l) => {
         let p = l.split(":")
         m[p[0]] = p[1]
     })
@@ -117,7 +120,7 @@ fastify.post('/consent', async function (request, reply) {
         session: {},
         grantAccessTokenAudience: consentRequest.requestedAccessTokenAudience,
         remember: Boolean(remember),
-        rememberFor: 3600, // TODO: configurable
+        rememberFor: REMEMBER_FOR,
     }
     const {body: acceptResult} = await hydraAdmin.acceptConsentRequest(request.body.challenge, acceptInfo)
     return reply.redirect(301, acceptResult.redirectTo)
@@ -184,14 +187,14 @@ fastify.post('/login', async function (request, reply) {
     const acceptInfo = {
         subject: username,
         remeber: Boolean(remember),
-        rememberFor: 3600 // TODO: configurable
+        rememberFor: REMEMBER_FOR
     }
     const {body: acceptResult} = await hydraAdmin.acceptLoginRequest(challenge, acceptInfo)
     return reply.redirect(301, acceptResult.redirectTo)
 })
 
 // Run the server!
-fastify.listen(3000, (err, address) => {
+fastify.listen(PORT, (err, address) => {
   if (err) throw err
   fastify.log.info(`server listening on ${address}`)
 })
