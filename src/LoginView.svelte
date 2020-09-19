@@ -39,7 +39,7 @@ form {
     <Textfield input$name="password" type="password" style="margin-bottom: 1em;" variant="outlined" bind:value={password} label="Password" input$aria-controls="helper-text-outlined-a" input$aria-describedby="helper-text-outlined-a" />
 
     <FormField style="margin-top: -1em;">
-      <Checkbox bind:checked={remeberMe} />
+      <Checkbox input$name="remember" input$value="true" bind:checked={remeberMe} />
       <span slot="label">Remember me</span>
     </FormField>
     <Actions>

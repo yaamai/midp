@@ -1,7 +1,7 @@
 'use strict'
 
 const fastify = require('fastify')({
-  logger: true
+    logger: true
 })
 const path = require('path')
 const AutoLoad = require('fastify-autoload')
@@ -17,17 +17,17 @@ fastify.register(fastifyCookie);
 fastify.register(fastifyFormBody);
 fastify.register(fastifyCSRF, { cookie: true  });
 fastify.register(require('fastify-static'), {
-  root: path.join(__dirname, '/../public'),
-  prefix: '/public/',
-  setHeaders: (res, path, stat) => {
-    console.log(path)
-    if (path.endsWith(".js")) {
-      res.setHeader('Content-Type', 'text/javascript')
-    }
-    if (path.endsWith(".css")) {
-      res.setHeader('Content-Type', 'text/css')
-    }
-  },
+    root: path.join(__dirname, '/../public'),
+    prefix: '/public/',
+    setHeaders: (res, path, stat) => {
+        console.log(path)
+        if (path.endsWith(".js")) {
+            res.setHeader('Content-Type', 'text/javascript')
+        }
+        if (path.endsWith(".css")) {
+            res.setHeader('Content-Type', 'text/css')
+        }
+    },
 })
 
 const template = `
@@ -67,34 +67,60 @@ function verifyUserPass(username, password) {
     return bcrypt.compareSync(password, hash)
 }
 
-
-
-const SCOPE_DESCRIPTION = {};
+const SCOPE_DESCRIPTION = {openid: 'Information to identify you (user-id)'};
 fastify.get('/consent', async function (request, reply) {
-  let challenge = request.query.consent_challenge
-  console.log(challenge)
+    const challenge = request.query.consent_challenge
 
-  let consentRequest = await hydraAdmin.getConsentRequest(challenge)
-  let data = {
-    view: "consent",
-    viewProps: {
-      csrf: request.csrfToken(),
-      challenge: challenge,
-      list: consentRequest.body.requestedScope.map((e) => {return {label: e, value: e, description: SCOPE_DESCRIPTION[e] || ""}})
+    const {body: consentRequest} = await hydraAdmin.getConsentRequest(challenge)
+    if (consentRequest.skip) {
+        const acceptInfo = {
+            grantScope: consentRequest.requestedScope,
+            grantAccessTokenAudience: consentRequest.requestedAccessTokenAudience,
+            session: {}
+        }
+        const {body: acceptResult} = await hydraAdmin.acceptConsentRequest(challenge, acceptInfo)
+        return reply.redirect(301, acceptResult.redirectTo)
     }
-  }
 
-  const result = template
-    .replace('SERVER_DATA', 'const SERVER_DATA = ' + JSON.stringify(data));
-  reply.type('text/html');
-  return reply.send(result);
+    const data = {
+      view: "consent",
+      viewProps: {
+        csrf: request.csrfToken(),
+        challenge: challenge,
+        list: consentRequest.requestedScope.map((e) => {
+            return {label: e, value: e, description: SCOPE_DESCRIPTION[e] || ""}
+        })
+      }
+    }
+    const result = template.replace('SERVER_DATA', 'const SERVER_DATA = ' + JSON.stringify(data));
+    reply.type('text/html');
+    return reply.send(result);
 })
 
 fastify.post('/consent', async function (request, reply) {
-    console.log(request)
-    let acceptResult = await hydraAdmin.acceptConsentRequest(request.body.challenge, {subject: "hogehoge", remember: true, rememberFor: 3600})
-    console.log(acceptResult)
-    return reply.redirect(301, acceptResult.body.redirectTo)
+    const {challenge} = request.body
+    const {action} = request.body
+
+    if (action != 'accept') {
+        const rejectInfo = {
+            error: 'access_denied',
+            errorDescription: 'The resource owner denied the request'
+        }
+        const {body: rejectResult} = await hydraAdmin.rejectConsentRequest(challenge, rejectInfo)
+        return reply.redirect(301, rejectResult.redirectTo)
+    }
+
+    const {scopes, remember} = request.body
+    const {body: consentRequest} = await hydraAdmin.getConsentRequest(challenge)
+    const acceptInfo = {
+        grantScope: scopes,
+        session: {},
+        grantAccessTokenAudience: consentRequest.requestedAccessTokenAudience,
+        remember: Boolean(remember),
+        rememberFor: 3600, // TODO: configurable
+    }
+    const {body: acceptResult} = await hydraAdmin.acceptConsentRequest(request.body.challenge, acceptInfo)
+    return reply.redirect(301, acceptResult.redirectTo)
 })
 
 fastify.get('/login', async function (request, reply) {
@@ -154,10 +180,10 @@ fastify.post('/login', async function (request, reply) {
         return reply.send(result);
     }
 
-    const {rememberMe} = request.body
+    const {remember} = request.body
     const acceptInfo = {
         subject: username,
-        remeber: Boolean(rememberMe),
+        remeber: Boolean(remember),
         rememberFor: 3600 // TODO: configurable
     }
     const {body: acceptResult} = await hydraAdmin.acceptLoginRequest(challenge, acceptInfo)

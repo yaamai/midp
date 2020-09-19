@@ -46,10 +46,10 @@ main.center {
     </List>
 
     <Actions>
-      <Button type="submit">
+      <Button name="action" value="accept" type="submit">
         <ButtonLabel>Accept</ButtonLabel>
       </Button>
-      <Button type="submit">
+      <Button name="action" value="reject" type="submit">
         <ButtonLabel>Reject</ButtonLabel>
       </Button>
     </Actions>
