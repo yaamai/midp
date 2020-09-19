@@ -6,6 +6,7 @@
     import FormField from '@smui/form-field';
     export let name;
     export let selected;
+    export let csrf;
 </script>
 
 <style>
@@ -31,7 +32,9 @@ form {
   <Card style="width: 360px" variant="outlined" padded>
     <h2>Login to AAA</h2>
 
-    <form action="/" method="post">
+    <form action="/login" method="post">
+    <input type="hidden" value="{csrf}" name="_csrf"/>
+
     <Textfield input$name="username" type="text" style="margin-bottom: 1em;" variant="outlined" bind:value={name} label="Username" input$aria-controls="helper-text-outlined-a" input$aria-describedby="helper-text-outlined-a" />
     <Textfield input$name="password" type="password" style="margin-bottom: 1em;" variant="outlined" bind:value={name} label="Password" input$aria-controls="helper-text-outlined-a" input$aria-describedby="helper-text-outlined-a" />
 

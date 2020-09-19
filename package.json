@@ -4,7 +4,8 @@
   "scripts": {
     "build": "rollup -c",
     "dev": "rollup -c -w",
-    "start": "sirv public"
+    "start": "sirv public",
+    "serve": "node src/server.js"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^14.0.0",
@@ -22,6 +23,13 @@
     "svelte": "^3.0.0"
   },
   "dependencies": {
+    "fastify": "^3.4.1",
+    "fastify-autoload": "^3.1.0",
+    "fastify-cli": "^2.2.0",
+    "fastify-cookie": "^4.1.0",
+    "fastify-csrf": "^1.0.4",
+    "fastify-formbody": "^5.0.0",
+    "fastify-static": "^3.2.0",
     "sirv-cli": "^1.0.0"
   }
 }
