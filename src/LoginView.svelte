@@ -25,25 +25,32 @@ form {
     flex-direction: column;
 }
 
+* :global(div.mdc-card) {
+    width: 360px;
+}
+
+* :global(.input-forms) {
+    margin-bottom: 1em;
+}
 </style>
 
 <main class="center">
-  <Card style="width: 360px" variant="outlined" padded>
+  <Card variant="outlined" padded>
     <h2>Login to AAA</h2>
 
     <form action="/login" method="post">
       <input type="hidden" value="{csrf}" name="_csrf"/>
       <input type="hidden" value="{challenge}" name="challenge"/>
 
-      <Textfield input$name="username" input$autocomplete="current-username" type="text" style="margin-bottom: 1em;" variant="outlined" bind:value={username} label="Username" input$aria-controls="helper-text-outlined-a" input$aria-describedby="helper-text-outlined-a" />
-      <Textfield input$name="password" input$autocomplete="password" type="password" style="margin-bottom: 1em;" variant="outlined" bind:value={password} label="Password" input$aria-controls="helper-text-outlined-a" input$aria-describedby="helper-text-outlined-a" />
+      <Textfield input$name="username" class="input-forms" input$autocomplete="current-username" type="text" variant="outlined" bind:value={username} label="Username" input$aria-controls="helper-text-outlined-a" input$aria-describedby="helper-text-outlined-a" />
+      <Textfield input$name="password" class="input-forms" input$autocomplete="password" type="password" variant="outlined" bind:value={password} label="Password" input$aria-controls="helper-text-outlined-a" input$aria-describedby="helper-text-outlined-a" />
 
-      <FormField style="margin-top: -1em;">
+      <FormField>
         <Checkbox input$name="remember" input$value="true" bind:checked={remember} />
         <span slot="label">Remember me</span>
       </FormField>
       <Actions>
-        <Button name="action" value="login" type="submit">
+        <Button name="action" value="login" type="submit" variant="raised">
           <Label>Login</Label>
         </Button>
         <Button name="action" value="cancel" type="submit">

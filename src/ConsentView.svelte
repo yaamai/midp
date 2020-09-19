@@ -19,6 +19,22 @@ main.center {
     align-items: center;
     height: calc(100vh - 16px);
 }
+
+* :global(div.mdc-card) {
+    width: 360px;
+}
+
+* :global(ul.scope-list > li) {
+    border-bottom: solid 1px #e0e0e0;
+    border-right: solid 1px #e0e0e0;
+    border-left: solid 1px #e0e0e0;
+}
+* :global(ul.scope-list > li:first-child) {
+    border-top: solid 1px #e0e0e0;
+}
+* :global(ul.scope-list > li:last-child) {
+    border-bottom: solid 1px #e0e0e0;
+}
 </style>
 
 <main class="center">
@@ -29,7 +45,7 @@ main.center {
       <input type="hidden" value="{csrf}" name="_csrf"/>
       <input type="hidden" value="{challenge}" name="challenge"/>
 
-      <List class="demo-list" twoLine checklist>
+      <List class="scope-list" twoLine checklist>
         {#each list as item}
           <Item>
             <Text>
@@ -43,12 +59,12 @@ main.center {
         {/each}
       </List>
 
-      <FormField style="margin-top: -1em;">
+      <FormField>
         <Checkbox input$name="remember" input$value="true" bind:checked={remember} />
         <span slot="label">Remember me</span>
       </FormField>
       <Actions>
-        <Button name="action" value="accept" type="submit">
+        <Button name="action" value="accept" type="submit" variant="raised">
           <ButtonLabel>Accept</ButtonLabel>
         </Button>
         <Button name="action" value="reject" type="submit">
