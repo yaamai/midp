@@ -122,7 +122,8 @@ fastify.post('/consent', async function (request, reply) {
         return reply.redirect(301, rejectResult.redirectTo)
     }
 
-    const {scopes, remember} = request.body
+    const {remember} = request.body
+    let {scopes} = request.body
     if (!Array.isArray(scopes)) {
         scopes = [scopes]
     }
