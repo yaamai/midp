@@ -199,7 +199,7 @@ fastify.post('/login', async function (request, reply) {
     const {remember} = request.body
     const acceptInfo = {
         subject: username,
-        remeber: Boolean(remember),
+        remember: Boolean(remember),
         rememberFor: REMEMBER_FOR
     }
     const {body: acceptResult} = await hydraAdmin.acceptLoginRequest(challenge, acceptInfo)
