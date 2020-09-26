@@ -123,6 +123,9 @@ fastify.post('/consent', async function (request, reply) {
     }
 
     const {scopes, remember} = request.body
+    if (!Array.isArray(scopes)) {
+        scopes = [scopes]
+    }
     const {body: consentRequest} = await hydraAdmin.getConsentRequest(challenge)
     const acceptInfo = {
         grantScope: scopes,
