@@ -18,8 +18,12 @@ const REMEMBER_FOR = process.env.MIDP_REMEMBER_FOR || 3600
 const PORT = process.env.PORT || 3000
 const LISTEN_ADDR = process.env.LISTEN_ADDR || '127.0.0.1'
 const HYDRA_ADMIN_URL = process.env.MIDP_HYDRA_URL || 'http://localhost:4445'
+const HYDRA_MOCK_TLS_TERMINATION =process.env.MIDP_MOCK_TLS_TERMINATION || '0'
 
 const hydraAdmin = new hydra.AdminApi(HYDRA_ADMIN_URL)
+if (Boolean(HYDRA_MOCK_TLS_TERMINATION)) {
+  hydraAdmin.defaultHeaders['X-Forwarded-Proto'] = 'https'
+}
 
 fastify.register(require('fastify-graceful-shutdown'))
 fastify.register(fastifyCookie);
